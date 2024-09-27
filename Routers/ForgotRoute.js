@@ -3,12 +3,13 @@ const path =require('path');
 const {generateOtp,sendmail} = require('./../Utils/NodeMailer');
 const RegisterModel = require('../Model/RegisterModel');
 const userModel = require('../Model/UserModel')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const OtpModel = require('../Model/OTPModel');
 const { default: mongoose } = require('mongoose');
 const jwt = require('jsonwebtoken')
 
 Route.post('/forgot',async (req,res,next)=>{
+    
     let body = req.body;
     let data=await RegisterModel.findOne({email:body.email});
     if(!data) return res.send({ok:false,message:'sorry you not register this email '+body.email})
@@ -23,7 +24,6 @@ Route.post('/forgot/otp/:id',async(req,res,next)=>{
     let hashOtp = data.otp;
     bcrypt.compare(String(otp),hashOtp,(err,result)=>{
         if(err) return res.send({ok:false,message:'otp invalid'});
-        console.log(Date.now())
         if(data.expires < Date.now()) return res.send({ok:false,message:'otp expired'}) 
         if(!result) return res.send({ok:false,message:"invalid otp"})
             res.send({ok:true,message:'otp succesfully'})
