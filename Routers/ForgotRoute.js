@@ -1,6 +1,6 @@
 const Route =require('express').Router();
 const path =require('path');
-const {generateOtp,sendmail} = require('./../Utils/NodeMailer');
+const {generateOtp,sendmail} = require('../Utils/NodeMailer')
 const RegisterModel = require('../Model/RegisterModel');
 const userModel = require('../Model/UserModel')
 const bcrypt = require('bcryptjs');
@@ -9,7 +9,7 @@ const { default: mongoose } = require('mongoose');
 const jwt = require('jsonwebtoken')
 
 Route.post('/forgot',async (req,res,next)=>{
-    
+
     let body = req.body;
     let data=await RegisterModel.findOne({email:body.email});
     if(!data) return res.send({ok:false,message:'sorry you not register this email '+body.email})

@@ -1,5 +1,5 @@
+const bcrypt = require('bcrypt');
 const nodemailer =require('nodemailer');
-const bcrypt = require('bcrypt')
 const OtpModel = require('./../Model/OTPModel');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
