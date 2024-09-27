@@ -3,7 +3,7 @@ const path = require('path');
 const RegisterModel = require('../Model/RegisterModel');
 const {verifyToken,verifyAuthPerson} = require('../Auth/tokenAuthen')
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const UserModel = require('../Model/UserModel')
 
 // verified *
