@@ -27,7 +27,10 @@ await mongoose.connect(process.env.DB_URL).then(()=>{
 })();
 app.use(LogReg);
 app.use(Homedatas)
-app.use(ForgotRoute)
+app.use(ForgotRoute);
+app.get('/',(req,res,next)=>{
+  res.send({ok:true,message:"myoption"})
+})
 // app.get('*', (req, res) => {
 //     res.sendFile(path.join(__dirname,'view', 'build', 'index.html'));
 //   });
