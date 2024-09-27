@@ -20,7 +20,7 @@ app.use(body.json());
 ( async function(){
 await mongoose.connect(process.env.DB_URL).then(()=>{
 }).catch(()=>{
-  process.exit(0)  
+  process.exit(1)  
 })
 })();
 app.use(LogReg);
