@@ -9,8 +9,6 @@ const UserModel = require('../Model/UserModel')
 // verified *
 Router.post('/register',async (req,res,next)=>{
     let body = req.body;
-    console.log(body);
-    
     try{
         let data =await RegisterModel.findOne({email:body.email});
         if(!body.password){ throw {ok:false,message:'password is required'};}
@@ -22,7 +20,7 @@ Router.post('/register',async (req,res,next)=>{
            if(fullname && email){
                //
                let data= await new UserModel({fullname,email,RegisterId:_id,topics:[]}).save();
-               let jwts =await jwt.sign({fullname,email,idUser:data._id},'raja');
+               let jwts =await jwt.sign({fullname,email,idUser:data._id},process.env.JWT_SECRET);
                if(!data) return res.send({ok:false,message:'Sorry Register Failed'});
              return  await res.cookie('myoption',jwts,{maxAge:1000*60*60*24*7}).send({url:`Dashboard/${data.fullname}/${data._id}`,ok:true,message:'Register successfully'});
                
@@ -49,7 +47,6 @@ return res.send({ok:false,message})
 // verified
 Router.post('/login',async (req,res,next)=>{
     try{
-        console.log(req.cookies.k)
         
         let {email,password} = req.body;
 
@@ -65,10 +62,10 @@ Router.post('/login',async (req,res,next)=>{
             if(err){ return res.send({ok:false,message:'sorry password wrong , please check your password'});}
             let dataUser =await UserModel.findOne({RegisterId:data.id});
             if(result) {
-                let jwts=await jwt.sign({email:data.email,idUser:dataUser._id},'raja',{expiresIn:'2d'});
+                let jwts=await jwt.sign({email:data.email,idUser:dataUser._id},process.env.JWT_SECRET,{expiresIn:'2d'});
                 res.cookie('myoption',jwts,{ httpOnly: true, secure: false })
                 return res.send({ok:true,url:`/Dashboard/${data.fullname}/${dataUser._id}`})
-                // return res.redirect(302,`http://localhost:3001/Dashboard/${data.fullname}/${dataUser._id}`)
+                
             } else{
                 res.send({ok:false,message:'Login failed. Please check your credentials.'})
             }

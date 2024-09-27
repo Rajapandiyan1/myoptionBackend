@@ -19,10 +19,8 @@ app.use(body.json());
 
 ( async function(){
 await mongoose.connect(process.env.DB_URL).then(()=>{
-    console.log("database is connected !")
 }).catch(()=>{
-    console.log("database isn`t connected");
-    
+  process.exit(0)  
 })
 })();
 app.use(LogReg);

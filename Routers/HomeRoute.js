@@ -72,7 +72,6 @@ Route.get('/topics/QandA/:id',verifyApi,async(req,res,next)=>{
         let id = req.params.id;
         let QandA=await TopicModel.findById({_id:id});
         if(!QandA) return res.send({ok:false,message:'Invalid user to topics data'});
-        console.log(QandA)
         res.send({ok:true,message:'get topics successfully',data:QandA})
     }catch(e){
         let message;
@@ -95,8 +94,6 @@ Route.put('/addNewQuestion/:id',verifyApi,async function(req,res,next){
     let id=req.params.id;
     try{
         let body = req.body;
-        console.log('add new question');
-        
         if(!body.question) throw {ok:false,message:'Question is Required'}
         if(!body.answer) throw {ok:false,message:'Answer is Required'}
         let data=await TopicModel.findById({_id:id});
@@ -130,8 +127,6 @@ Route.delete('/removeTopicsQuestion/:id',verifyApi,async(req,res,next)=>{
 
         if(e.message.includes(':')){
             message=e.message.split(':');
-            console.log(message);
-            
             message.shift();
             message= message.join(':');
         }else{
@@ -164,14 +159,11 @@ Route.delete('/deleteTopics/:id',verifyApi,async(req,res,next)=>{
     try{
 
             const id = req.params.id;
-            console.log(id)
             let data =await UserModel.findById({_id:req.body.userId});
             if(!data) return res.send({ok:false,message:'you aren`t authorization person'});
             let findData=data.topics.filter((datas) =>{ if(datas.topicsId!=id){
-                console.log(datas.topicsId)
                 return datas;
             }});
-            console.log(findData)
             let deletesTopicsUser=await UserModel.findByIdAndUpdate({_id:req.body.userId},{topics:findData});
             if(!deletesTopicsUser) return res.send({ok:false,message:'delete unsuccessfully 2'});
            let topic=await TopicModel.findByIdAndDelete({_id:id})

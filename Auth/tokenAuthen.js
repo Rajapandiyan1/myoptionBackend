@@ -12,13 +12,11 @@ async function verifyApi(req,res,next) {
         let cookie =await req.cookies['myoption'] || null;
         if(!cookie) return res.send({ok:false,message:'sorry ,you aren`t athuentication person ',authen:false});
         let verify=await verifyToken(cookie);
-        console.log(verify)
         let userId=verify.data.idUser;
         if(!verify.ok) return res.send(verify)
         let valid=await UserModel.findById({_id:userId});
         if(!valid)return res.status(401).send({ok:false,message:'sorry you aren`t athuentication person ',authen:false})
         if(!verify.ok) return res.send({ok:false,message:'you aren`t athuentication person , sorry',authen:false});
-        console.log(valid)
         req.body.userId=valid._id;
         req.body.userName=valid.fullname;
         next()
@@ -36,7 +34,7 @@ async function verifyAuthPerson(req,res,next) {
     try{
         let cookie = req.cookies['myoption'] || null;
         if(!cookie) return res.send({Authen:false,message:'You not authne'})
-        let verify =await jwt.verify(cookie,'raja');
+        let verify =await jwt.verify(cookie,process.env.JWT_SECRET);
         let data=verify.idUser;
         let valid=await UserModel.findById({_id:req.params.id}) || null;
         if(!valid)return res.send({ok:false,message:'<h1>Sorry this page not avaliable</h1>'})
